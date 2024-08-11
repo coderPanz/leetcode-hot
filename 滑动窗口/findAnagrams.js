@@ -7,6 +7,11 @@
 // 起始索引等于 0 的子串是 "cba", 它是 "abc" 的异位词。
 // 起始索引等于 6 的子串是 "bac", 它是 "abc" 的异位词。
 
+/**
+ * @param {string} s
+ * @param {string} p
+ * @return {number[]}
+ */
 function findAnagrams(s, p) {
   const result = []
   const pLen = p.length
@@ -21,9 +26,8 @@ function findAnagrams(s, p) {
 
   // 填充 pCount
   for (let char of p) {
-    pCount[char.charCodeAt(0) - "a".charCodeAt(0)]++
+    pCount[char.charCodeAt() - "a".charCodeAt()]++
   }
-
   // 初始化滑动窗口
   for (let i = 0; i < pLen; i++) {
     sCount[s.charCodeAt(i) - "a".charCodeAt(0)]++
@@ -39,9 +43,11 @@ function findAnagrams(s, p) {
     // 添加新字符
     sCount[s.charCodeAt(i) - "a".charCodeAt(0)]++
     // 删除旧字符
+    // s.charCodeAt(i - pLen)：为了算出滑动窗口左边的元素位于s的位置
+    // s.charCodeAt(i - pLen) - "a".charCodeAt(0)：为了算出窗口左侧元素数值位于sCount的位置一遍删除频次
     sCount[s.charCodeAt(i - pLen) - "a".charCodeAt(0)]--
 
-    // 比较窗口内的字符计数
+    // 比较窗口内的字符计数, 其中i是当前窗口的结束索引（相同的前提肯定是i走到了窗口的结束位置），所以计算开始所以需要减pLen加一
     if (arraysEqual(pCount, sCount)) {
       result.push(i - pLen + 1)
     }
@@ -64,4 +70,3 @@ function arraysEqual(arr1, arr2) {
 const s = "cbaebabacd"
 const p = "abc"
 console.log(findAnagrams(s, p))
-
