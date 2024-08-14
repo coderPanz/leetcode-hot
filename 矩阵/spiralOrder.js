@@ -3,6 +3,7 @@
 // 输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
 // 输出：[1,2,3,6,9,8,7,4,5]
 
+// 边界控制法
 /**
  * @param {number[][]} matrix
  * @return {number[]}
@@ -19,7 +20,7 @@ var spiralOrder = function (matrix) {
       res.push(matrix[top][i])
     }
     top++
-    if (top > bottom) break //四个边，每个边结束都判断是否终止
+    if (top > bottom) break //每个边压缩后需要，判断边界越界异常。
     for (let i = top; i <= bottom; i++) {
       res.push(matrix[i][right])
     }
