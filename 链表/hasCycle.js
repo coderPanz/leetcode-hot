@@ -5,6 +5,8 @@
 // 输出：true
 // 解释：链表中有一个环，其尾部连接到第二个节点。
 
+// 思路：龟兔赛跑算法-弗洛伊德判圈算法
+// 快慢指针
 /**
  * Definition for singly-linked list.
  * function ListNode(val) {
@@ -18,5 +20,13 @@
  * @return {boolean}
  */
 var hasCycle = function(head) {
-    
+  let fast = head // 从表头出发
+  let slow = head // 从表头出发
+  while (fast !== null && fast.next !== null) {
+    fast = head.next.next
+    slow = head.next
+    // 说明有环
+    if (fast === slow) return true
+  }
+  return false
 };
