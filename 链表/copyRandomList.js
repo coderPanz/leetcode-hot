@@ -4,6 +4,10 @@
 // 输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
 // 输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
 
+
+// 思路：创建新节点并建立映射：遍历原链表，为每个节点创建一个新节点，并将原节点与新节点之间的映射关系存储在哈希表中。
+// 设置新节点的 next 和 random 指针：再次遍历原链表，通过哈希表设置新节点的 next 和 random 指针。
+// 返回新链表的头节点：最终返回新链表的头节点。
 /**
  * // Definition for a _Node.
  * function _Node(val, next, random) {
@@ -17,33 +21,43 @@
  * @param {_Node} head
  * @return {_Node}
  */
-var copyRandomList = function (head) {
-  if (!head) return null
+/**
+ * Definition for a Node.
+ * function Node(val, next, random) {
+ *     this.val = val;
+ *     this.next = next;
+ *     this.random = random;
+ * }
+ */
 
-  let originalCurrent = head
-  let dummyHead = new Node() // 虚拟头节点
-  let newCurrent = dummyHead
-  let nodeMap = new Map() // 用来映射原节点和新节点
-
-  // 第一次遍历：复制每个节点，并将原节点和新节点存入映射表
-  while (originalCurrent) {
-    let newNode = new Node(originalCurrent.val)
-    nodeMap.set(originalCurrent, newNode)
-    newCurrent.next = newNode
-    newCurrent = newCurrent.next
-    originalCurrent = originalCurrent.next
+/**
+ * @param {Node} head
+ * @return {Node}
+ */
+var copyRandomList = function(head) {
+  if (head === null) {
+    return null;
   }
 
-  // 第二次遍历：设置新节点的 random 指针
-  originalCurrent = head
-  newCurrent = dummyHead.next
-  while (originalCurrent) {
-    newCurrent.random = originalCurrent.random
-      ? nodeMap.get(originalCurrent.random)
-      : null
-    originalCurrent = originalCurrent.next
-    newCurrent = newCurrent.next
+  // 创建一个哈希表来存储原节点和新节点的映射关系
+  const map = new Map();
+
+  // 第一次遍历：创建所有新节点，并建立原节点到新节点的映射
+  let current = head;
+  while (current !== null) {
+    map.set(current, new Node(current.val, null, null));
+    current = current.next;
   }
 
-  return dummyHead.next
-}
+  // 第二次遍历：设置新节点的 next 和 random 指针
+  current = head;
+  while (current !== null) {
+    const newNode = map.get(current);
+    newNode.next = map.get(current.next) || null;
+    newNode.random = map.get(current.random) || null;
+    current = current.next;
+  }
+
+  // 返回新链表的头节点
+  return map.get(head);
+};
